@@ -1,0 +1,63 @@
+function [] = encoderSetup()
+
+if ~exist("a", "var")
+    a = arduino('/dev/cu.usbmodem14101','Mega2560','Libraries',{'I2C', 'SPI', 'Servo','rotaryEncoder'});
+end
+
+fprintf("arduino created successfully\n")
+
+p = "D13";
+n = "D12";
+c = "D11";
+
+configurePin(a, p, "DigitalOutput")
+configurePin(a, n, "DigitalOutput")
+configurePin(a, c, "DigitalOutput")
+configurePin(a, c, "PWM")
+
+if ~exist("encoder", "var")
+    encoder = rotaryEncoder(a, 'D19', 'D18');
+end
+
+fprintf("encoder created successfully\n")
+
+fprintf("ready to read encoder\n")
+
+pos = 0;
+pwm = 0;
+
+while 1
+    [count,~] = readCount(encoder);
+    
+    fprintf("count = %d\n", count)
+    fprintf("position = %d\n", pos)
+    
+    if count < pos
+        writeDigitalPin(a, p, 1)
+        writeDigitalPin(a, n, 0)
+        
+        if count > pos - 500
+            pwm = (pos - count) / 500;
+        else
+            pwm = 1;
+        end
+        
+        writePWMDutyCycle(a, c, pwm)
+        
+    elseif count > pos
+        writeDigitalPin(a, p, 0)
+        writeDigitalPin(a, n, 1)
+        
+        if count < pos + 500
+            pwm = (pos + count) / 500;
+        else
+            pwm = 1;
+        end
+        
+        writePWMDutyCycle(a, c, pwm)
+        
+    end
+end
+
+
+

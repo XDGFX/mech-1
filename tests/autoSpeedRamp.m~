@@ -1,0 +1,33 @@
+setupArduino
+
+pwmPin = "D10";
+rampPin = "D11";
+toggle = "D13";
+
+stepSize = 150;
+frq = 490;
+
+tPause = 0.2;
+
+configurePin(a, pwmPin, "DigitalOutput")
+configurePin(a, rampPin, "DigitalOutput")
+configurePin(a, toggle, "DigitalOutput")
+
+% Set ramp low
+writeDigitalPin(a, rampPin, 0)
+
+% Set toggle to ramp pin
+writeDigitalPin(a, toggle, 1)
+
+% Set PWM pin active
+writePWMDutyCycle(a, pwmPin, 0.5)
+
+% Ramp up
+for x = 0:stepSize:frq
+    playTone(a, rampPin, x, tPause);
+    pause(0.1)
+end
+
+% Set toggle to PWM pin
+writeDigitalPin(a, toggle, 0)
+playTone(a, rampPin, 0, tPause);
