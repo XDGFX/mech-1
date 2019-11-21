@@ -1,19 +1,30 @@
+possible problem: steps are different for each axis; whereas time is not
+
+maybe it should be in time (makes calculations easier) and just be accurate in terms of how far it will get in a given time
+
+Then maybe correct if after if anything is off?
+
+----
+
 both axes have 'required steps'
 
 longest distance is 'total steps'
 
-if required short required steps is less than total steps minus two ramps, do stuff in the middle
+available steps is total steps minus two times ramp (note: if longest does not reach full speed;
+  then total steps = ramp steps therefore available steps = 0)
+
+if required short steps is less than available steps, do stuff in the middle
 
 if required short steps is greater than above, you can correct mid flight on one condition
 
-steps required to correct (number of steps while slower one is ramping to get required delta steps due to the change in frequency)
-is less than the leftover steps (total steps minus two ramps)
+steps required to correct (number of steps (of long distance) while slower one is ramping to get required delta steps due to the change in frequency)
+is less than the available steps
 
 all other cases do one at a time
 
 ???
 
-
+----
 
 Case 1:
 Only one dimension
