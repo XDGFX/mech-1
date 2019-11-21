@@ -1,0 +1,12 @@
+% Example frequency - time plot
+
+% Ramp of 1000Hz / s
+frq = [0, 1000, 1000, 0];
+time = [0, 1, 9, 10];
+
+betterTime = [time(1):0.01:time(end)];
+
+betterRamp = interp1(time, frq, betterTime);
+
+
+steps = cumtrapz(profile(2, :), profile(1, :));

@@ -1,0 +1,38 @@
+both axes have 'required steps'
+
+longest distance is 'total steps'
+
+if required short required steps is less than total steps minus two ramps, do stuff in the middle
+
+if required short steps is greater than above, you can correct mid flight on one condition
+
+steps required to c
+
+
+Case 1:
+Only one dimension
+- Only move one dimension
+
+Case 2:
+Dimensions the same
+- Move both dimensions at the same time
+
+Case 3:
+One dimension longer than the other
+
+  Case 3.1:
+  Longest dimension within ramp distance
+  - Move one at a time
+
+  Case 3.2:
+  Longest dimension not within ramp distance, and shortest distance can be completed while other is on full speed
+  - Move longest first, then adjust shortest while longest is moving
+
+  Case 3.3:
+  Longest dimension not within ramp distance, and shortest distance can not be completed while other is on full speed
+
+    Case 3.3.1:
+    Both can be ramped up and then correction can be made mid flight
+
+    Case 3.3.2:
+    Both can be ramped up but correction cannot be made mid flight
