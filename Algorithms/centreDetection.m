@@ -1,7 +1,5 @@
 function [] = centreDetection()
 
-global counts wrong
-
 % Generate sample data; input this instead if you have it
 [sensedData, numberMagnets] = generateNoiseImages;
 
@@ -93,22 +91,13 @@ opts = statset('Display','final');
 [idx,C] = kmeans(points', nMagnetsDetected,'Distance','cityblock',...
     'Replicates',5,'Options',opts);
 
-% hold on
-% 
-% plot(C(:,1),C(:,2),'kx',...
-%     'MarkerSize',15,'LineWidth',3)
-% 
-% title("Actual nMagnets: " + numberMagnets + ". Detected nMagnets: " + nMagnetsDetected)
-% 
-% hold off
+hold on
 
-if numberMagnets ~= nMagnetsDetected
-    if numberMagnets ~= 1
-        wrong = wrong + 1;
-        % saveas(1, datestr(now,'HH:MM:SS FFF'), "jpg")
-    end
-end
+plot(C(:,1),C(:,2),'kx',...
+    'MarkerSize',15,'LineWidth',3)
 
-counts = counts + 1;
+title("Actual nMagnets: " + numberMagnets + ". Detected nMagnets: " + nMagnetsDetected)
+
+hold off
 
 end
