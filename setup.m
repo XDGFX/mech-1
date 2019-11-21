@@ -33,13 +33,13 @@ p.encoder.y2 = ""; % Edge trig pulse
 v.stepSize = 25;
 
 % Frequency at which ramp will switch to 555
-v.frq = 490 - v.stepSize;
+v.frq = 4400 - v.stepSize;
 
 % Time pause between ramp steps
 v.tPause = 0.05;
 
 % Number of steps required to ramp up or down from full speed
-% v.rampSteps = 464;
+v.rampSteps = 464;
 
 %% --- SETUP ARDUINO ---
 

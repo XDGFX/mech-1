@@ -1,0 +1,9 @@
+steps = 1;
+time = 1;
+
+for frq = 1:1:100
+    steps(time) = steps(time-1) + 
+    
+    
+    time = time + 1;
+end

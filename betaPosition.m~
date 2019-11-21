@@ -1,0 +1,48 @@
+function [] = betaPosition(a, p, v, tp)
+% BETAPOSITION Takes target position in the form of pos.x and pos.y, and
+% moves gantry to get to the position.
+
+% when profile (pr) = 1, frq = v.frq
+
+% v.rampSteps = number of steps in normal ramp
+rs = v.rampSteps;
+
+dist.x = tp.x - v.pos.x;
+dist.y = tp.y - v.pos.y;
+
+dist.l = max([dist.x, dist.y]); % dist long
+dist.s = min([dist.x, dist.y]); % shortes
+
+pr.l = [0; 0];
+pr.s = [0; 0];
+
+if dist.long >= 4 * rs
+    if dist.short >= 2 * rs
+        
+        pr.long = [pr.l]
+        
+        
+        start 45 deg
+        
+             both ramp up to 1
+             
+             once reached 1, ramp down shorter
+        
+        
+        do shorter correction in middle
+    else
+        start at 90 deg long one only
+        
+        if dist.long - 2 * ramp > dist.short
+            correct in middle
+        else
+            do one at a time
+        end
+    end
+else
+    do one at a time
+end
+
+
+end
+

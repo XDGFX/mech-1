@@ -1,6 +1,0 @@
-function [v] = setupVariables()
-
-
-
-end
-
