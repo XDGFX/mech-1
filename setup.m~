@@ -39,7 +39,7 @@ v.frq = 490 - v.stepSize;
 v.tPause = 0.05;
 
 % Number of steps required to ramp up or down from full speed
-% v.rampSteps = 464;
+%v.rampSteps = 464;
 
 %% --- SETUP ARDUINO ---
 
@@ -102,10 +102,13 @@ playTone(a.a, p.ramp, 0, 0.1)
 a.encoder.x = rotaryEncoder(a.a, p.encoder.x1, p.encoder.x2);
 a.encoder.y = rotaryEncoder(a.a, p.encoder.y1, p.encoder.y2);
 
-% Zero position (relative to gantry) and count (total steps since zero) variables
-v.pos.x = 0;
-v.pos.y = 0;
-v.count.x = 0;
-v.count.y = 0;
+
+v.pos = 0;
+
+v.count = 0;
+
+% Set toggle pins to ramp
+
+setupZero % zeros gantry and sets up encoder
 
 end
