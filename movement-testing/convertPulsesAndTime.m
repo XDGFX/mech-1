@@ -10,10 +10,12 @@ betterTime = [time(1):0.1:time(end)];
 betterFrq = interp1(time, frq, betterTime);
 steps = cumtrapz(betterTime, betterFrq) / t;
 
-plot(steps, betterFrq)
+%plot(steps, betterFrq)
 
 end
 
 m = maxFrq / rampSteps ^(0.5)
 
-frq = m * steps ^ 0.5
+frq = m .* steps .^ 0.5
+
+plot(betterTime, steps)

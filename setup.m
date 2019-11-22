@@ -10,27 +10,27 @@ p.direction.x = "D51";
 p.direction.y = "D50";
 
 % Gantry microswitch pins
-p.mswitch.x = "D47";
-p.mswitch.y = "D46";
+p.mswitch.x = "D49";
+p.mswitch.y = "D48";
 
 % playTone / ramp pin
-p.ramp = "";
+p.ramp = "D9";
 
 % Ramp toggle pins (switch between ramp and 555)
-p.toggle.x = "";
-p.toggle.y = "";
+p.toggle.x = "D8";
+p.toggle.y = "D7";
 
 % Encoder read pins
-p.encoder.x1 = ""; % Stepper input
-p.encoder.x2 = ""; % Edge trig pulse
-p.encoder.y1 = ""; % Stepper input
-p.encoder.y2 = ""; % Edge trig pulse
+p.encoder.x1 = "D2"; % Stepper input
+p.encoder.x2 = "D3"; % Edge trig pulse
+p.encoder.y1 = "D18"; % Stepper input
+p.encoder.y2 = "D19"; % Edge trig pulse
 
 %% --- OTHER VARIABLES ---
 
 % RAMP VARIABLES
 % Ramp up / down step size in Hz
-v.stepSize = 25;
+v.stepSize = 100;
 
 % Frequency at which ramp will switch to 555
 v.frq = 4400 - v.stepSize;
@@ -73,7 +73,7 @@ writeDigitalPin(a.a, p.direction.x, 0)
 writeDigitalPin(a.a, p.direction.y, 0)
 
 % Constant playtone of 490Hz for 100s
-playTone(a.a, p.ramp, 490, 100)
+playTone(a.a, p.ramp, 490, 60)
 
 % Initialise zeroing variables
 z.x = 1;

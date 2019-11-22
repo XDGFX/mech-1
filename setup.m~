@@ -2,29 +2,29 @@ function [a, p, v] = setup()
 %% --- PIN VARIABLES ---
 
 % Gantry enable pins
-p.enable.x = "D53";
-p.enable.y = "D52";
+p.enable.x = "";
+p.enable.y = "";
 
 % Gantry direction pins
-p.direction.x = "D51";
-p.direction.y = "D50";
+p.direction.x = "";
+p.direction.y = "";
 
 % Gantry microswitch pins
-p.mswitch.x = "D47";
-p.mswitch.y = "D46";
+p.mswitch.x = "";
+p.mswitch.y = "";
 
 % playTone / ramp pin
-p.ramp = "";
+p.ramp = "D9";
 
 % Ramp toggle pins (switch between ramp and 555)
 p.toggle.x = "";
 p.toggle.y = "";
 
 % Encoder read pins
-p.encoder.x1 = ""; % Stepper input
-p.encoder.x2 = ""; % Edge trig pulse
-p.encoder.y1 = ""; % Stepper input
-p.encoder.y2 = ""; % Edge trig pulse
+p.encoder.x1 = "D13"; % Stepper input
+p.encoder.x2 = "D12"; % Edge trig pulse
+p.encoder.y1 = "D11"; % Stepper input
+p.encoder.y2 = "D10"; % Edge trig pulse
 
 %% --- OTHER VARIABLES ---
 
@@ -33,13 +33,13 @@ p.encoder.y2 = ""; % Edge trig pulse
 v.stepSize = 25;
 
 % Frequency at which ramp will switch to 555
-v.frq = 490 - v.stepSize;
+v.frq = 4400 - v.stepSize;
 
 % Time pause between ramp steps
 v.tPause = 0.05;
 
 % Number of steps required to ramp up or down from full speed
-%v.rampSteps = 464;
+v.rampSteps = 464;
 
 %% --- SETUP ARDUINO ---
 
@@ -102,13 +102,10 @@ playTone(a.a, p.ramp, 0, 0.1)
 a.encoder.x = rotaryEncoder(a.a, p.encoder.x1, p.encoder.x2);
 a.encoder.y = rotaryEncoder(a.a, p.encoder.y1, p.encoder.y2);
 
-
-v.pos = 0;
-
-v.count = 0;
-
-% Set toggle pins to ramp
-
-setupZero % zeros gantry and sets up encoder
+% Zero position (relative to gantry) and count (total steps since zero) variables
+v.pos.x = 0;
+v.pos.y = 0;
+v.count.x = 0;
+v.count.y = 0;
 
 end
