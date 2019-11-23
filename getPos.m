@@ -5,13 +5,10 @@ function [v] = getPos(a, v, p)
 
 for d = ['x', 'y']
     
-    % Find direction; 1 is positive, 0 is negative
-    direction.(d) = readDigitalPin(a.a, p.direction.(d));
-    
-    if direction.(d) % Travelling in positive direction
+    if v.direction.(d) % Travelling in positive direction
         
         % update position with change between old count and current count
-        v.pos.(d) = v.pos.(d) + (readCount(a.encoder.(d)) - v.count.(d));
+        v.pos.(d) = v.pos.(d) + (v.count.(d) - readCount(a.encoder.(d)));
         
         % update current count
         [v.count.(d), ~] = readCount(a.encoder.(d));
@@ -19,7 +16,7 @@ for d = ['x', 'y']
     else % Travelling in negative direction
         
         % update position with change between old count and current count
-        v.pos.(d) = v.pos.(d) - (readCount(a.encoder.(d)) - v.count.(d));
+        v.pos.(d) = v.pos.(d) + (readCount(a.encoder.(d)) - v.count.(d));
         
         % update current count
         [v.count.(d), ~] = readCount(a.encoder.(d));

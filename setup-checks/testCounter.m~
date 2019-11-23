@@ -1,0 +1,32 @@
+% Enable x and y
+writeDigitalP
+
+% Set direction to positive both axes
+v.direction.x = 1;
+v.direction.y = 1;
+
+writeDigitalPin(a.a, p.direction.x, v.direction.x)
+writeDigitalPin(a.a, p.direction.y, v.direction.y)
+
+% Read position
+v.old = getPos(a, v, p);
+
+% 100Hz for 1 sec should give position change by 200
+playTone(a.a, p.ramp, 100, 1)
+
+% Read new position
+v = getPos(a, v, p);
+
+% Test positive x
+if v.pos.x - v.old.pos.x == 200
+    disp("Positive x success!")
+else
+    disp("Positive x fail!")
+end 
+
+% Test positive y
+if v.pos.y - v.old.pos.y == 200
+    disp("Positive y success!")
+else
+    disp("Positive y fail!")
+end 

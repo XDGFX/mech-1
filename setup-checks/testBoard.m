@@ -8,4 +8,8 @@ end
 writeDigitalPin(a.a, p.toggle.y, 1)
 writeDigitalPin(a.a, p.toggle.x, 1)
 
+pause(1)
+
+
+
 fprintf("Success!\n")

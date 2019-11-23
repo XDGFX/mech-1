@@ -2,23 +2,23 @@ function [a, p, v] = setup()
 %% --- PIN VARIABLES ---
 
 % Gantry enable pins
-p.enable.x = "D53";
-p.enable.y = "D52";
+p.cutout.x = "D49";
+p.cutout.y = "D48";
 
 % Gantry direction pins
-p.direction.x = "D51";
-p.direction.y = "D50";
+p.direction.x = "D53";
+p.direction.y = "D51";
 
 % Gantry microswitch pins
-p.mswitch.x = "D49";
-p.mswitch.y = "D48";
+p.mswitch.x = "D52";
+p.mswitch.y = "D50";
 
 % playTone / ramp pin
 p.ramp = "D9";
 
-% Ramp toggle pins (switch between ramp and 555)
-p.toggle.x = "D8";
-p.toggle.y = "D7";
+% Gantry enable pins (previously toggle)
+p.enable.x = "D8";
+p.enable.y = "D7";
 
 % Encoder read pins
 p.encoder.x1 = "D2"; % Stepper input
@@ -30,10 +30,10 @@ p.encoder.y2 = "D19"; % Edge trig pulse
 
 % RAMP VARIABLES
 % Ramp up / down step size in Hz
-v.stepSize = 100;
+v.stepSize = 300;
 
 % Frequency at which ramp will switch to 555
-v.frq = 4400 - v.stepSize;
+v.frq = 4319;
 
 % Time pause between ramp steps
 v.tPause = 0.05;
@@ -43,6 +43,8 @@ v.rampSteps = 464;
 
 %% --- SETUP ARDUINO ---
 
+input("TURN OFF GANTRY! Press enter to continue... ")
+
 a.a = arduino('/dev/cu.usbmodem14101','Mega2560','Libraries',{'I2C', 'SPI', 'Servo', 'rotaryEncoder'});
 
 
@@ -50,6 +52,13 @@ a.a = arduino('/dev/cu.usbmodem14101','Mega2560','Libraries',{'I2C', 'SPI', 'Ser
 
 do = "DigitalOutput";
 di = "DigitalInput";
+
+% Configure and set cutout pins low (enabled)
+configurePin(a.a, p.cutout.x, do)
+configurePin(a.a, p.cutout.y, do)
+
+writeDigitalPin(a.a, p.cutout.x, 0)
+writeDigitalPin(a.a, p.cutout.y, 0)
 
 % Configure and set enable pins low (enabled)
 configurePin(a.a, p.enable.x, do)
@@ -66,46 +75,8 @@ configurePin(a.a, p.direction.y, do)
 configurePin(a.a, p.mswitch.x, di)
 configurePin(a.a, p.mswitch.y, di)
 
-%% --- ZERO GANTRY ---
+input("TURN ON GANTRY! Press enter to zero gantry... ")
 
-% Set direction pins to -x, -y
-writeDigitalPin(a.a, p.direction.x, 0)
-writeDigitalPin(a.a, p.direction.y, 0)
-
-% Constant playtone of 490Hz for 100s
-playTone(a.a, p.ramp, 490, 60)
-
-% Initialise zeroing variables
-z.x = 1;
-z.y = 1;
-
-while z.x || z.y
-    
-    % Check x axis not reached home
-    if ~readDigitalPin(a.a, p.mswitch.x)
-        writeDigitalPin(a.a, p.enable.x, 1)
-        z.x = 0;
-    end
-    
-    % Check y axis not reached home
-    if ~readDigitalPin(a.a, p.mswitch.y)
-        writeDigitalPin(a.a, p.enable.y, 1)
-        z.y = 0;
-    end
-    
-end
-
-% Clear playtone pin
-playTone(a.a, p.ramp, 0, 0.1)
-
-% Configure rotary encoders (will start counting immediately)
-a.encoder.x = rotaryEncoder(a.a, p.encoder.x1, p.encoder.x2);
-a.encoder.y = rotaryEncoder(a.a, p.encoder.y1, p.encoder.y2);
-
-% Zero position (relative to gantry) and count (total steps since zero) variables
-v.pos.x = 0;
-v.pos.y = 0;
-v.count.x = 0;
-v.count.y = 0;
+[a, v] = zeroGantry(a, p, v);
 
 end
