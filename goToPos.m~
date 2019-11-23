@@ -1,0 +1,6 @@
+function [v] = goToPos(a, p, v, pos)
+% Sends gantry to pos = [x, y]
+outputArg1 = inputArg1;
+outputArg2 = inputArg2;
+end
+

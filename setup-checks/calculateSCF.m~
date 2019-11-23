@@ -1,0 +1,24 @@
+function [v] = calculateSCF(a, p, v)
+
+% Starting SCF
+v.SCF = 50;
+
+for dist = 100:100:1000
+    if v.SCF > 55 || v.SCF < 2
+        error("out of bounds")
+    end
+    
+    % Zero gantry
+    [a, v] = zeroGantry(a, p, v);
+    
+    % Travel distance and measure distance traveled
+    travel = testFrqCurve(a, p, v, dist);
+    
+    travel = (travel.x + travel.y) / 2;
+    
+    v.SCF = v.SCF * dist / travel;
+    
+    fprintf("Calculated SCF: %f\n", v.SCF)
+end
+end
+

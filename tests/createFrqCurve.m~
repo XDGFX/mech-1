@@ -1,0 +1,22 @@
+% Take current position as 0
+
+dist = 3000;
+profileX = 1:dist;
+frq = zeros(dist, 1);
+
+% Max x steps before s curve will reach max frq
+maxSx = 300;
+
+% If distance large enough for two full S curves
+if dist > 2 * maxSx
+    
+    
+    frq(1:maxSx) = smf(1:maxSx, [0 maxSx]);
+    
+    
+    
+end
+
+
+
+plot(profileX, frq)

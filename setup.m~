@@ -36,7 +36,7 @@ v.frq = 2000;
 v.m = 50;
 
 % Step Correction Factor; how many steps between frequency updates
-v.SCF = 1.0000e-04;
+v.SCF = 9;
 
 %% --- SETUP ARDUINO ---
 
