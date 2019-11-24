@@ -1,13 +1,23 @@
-function [] = centreDetection()
+function [C] = centreDetection(v, numberMagnets)
+
+% Convert terminology
+sensedData = v.map;
+
+% Normalise sensor input
+sensedData = sensedData - 2.5;
+sensedData = abs(sensedData);
+
+% Apply S curve filter
+sensedData = smf(sensedData, [0, 0.3]);
 
 % Generate sample data; input this instead if you have it
-[sensedData, numberMagnets] = generateNoiseImages;
+%[sensedData, numberMagnets] = generateNoiseImages;
 
 % Use Wiener2 method to remove noise, with 8x8 radius
-wiener2Data = wiener2(sensedData', [8 8]);
+wiener2Data = wiener2(sensedData, [2 2]);
 
 % Remove all data with a value weaker than 0.4
-wiener2Data = wiener2Data .* (wiener2Data > 0.4);
+wiener2Data = wiener2Data .* (wiener2Data > 0);
 
 % Create contour plot from this data
 % figure(1)
@@ -99,5 +109,8 @@ plot(C(:,1),C(:,2),'kx',...
 title("Actual nMagnets: " + numberMagnets + ". Detected nMagnets: " + nMagnetsDetected)
 
 hold off
+
+% Convert to gantry coordinates
+C = C .* v.scanRes;
 
 end

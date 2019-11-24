@@ -10,21 +10,23 @@ end
 
 for d = d
     
+    rc = readCount(a.encoder.(d));
+    
     if v.direction.(d) % Travelling in positive direction
         
         % update position with change between old count and current count
-        v.pos.(d) = v.pos.(d) + (v.count.(d) - readCount(a.encoder.(d)));
+        v.pos.(d) = v.pos.(d) + (v.count.(d) - rc);
         
         % update current count
-        [v.count.(d), ~] = readCount(a.encoder.(d));
+        v.count.(d) = rc;
         
     else % Travelling in negative direction
         
         % update position with change between old count and current count
-        v.pos.(d) = v.pos.(d) + (readCount(a.encoder.(d)) - v.count.(d));
+        v.pos.(d) = v.pos.(d) + (rc - v.count.(d));
         
         % update current count
-        [v.count.(d), ~] = readCount(a.encoder.(d));
+        v.count.(d) = rc;
         
     end
 end

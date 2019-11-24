@@ -27,18 +27,18 @@ p.encoder.y1 = "D18"; % Stepper input
 p.encoder.y2 = "D19"; % Edge trig pulse
 
 % Hall effect sensor read pins
-p.sens(2) = "A10";
-p.sens(3) = "A9";
-p.sens(1) = "A8";
+p.sens(1) = "A15";
+p.sens(2) = "A14";
+p.sens(3) = "A13";
 
 %% --- OTHER VARIABLES ---
 
 % RAMP VARIABLES
 % Max frequency
-v.frq = 4000;
+v.frq = 2000;
 
 % Ramp gradient
-v.m = 75;
+v.m = 50;
 
 % How many steps is close enough?
 v.CE = 50;
@@ -47,12 +47,12 @@ v.CE = 50;
 v.minFrq = 400;
 
 % Maximum gantry dimensions
-v.gantry.x = 15000;
-v.gantry.y = 15000;
+v.gantry.x = 12500;
+v.gantry.y = 12500;
 
 % SCAN VARIABLES
 % Steps between scanning interval
-v.scanRes = 300;
+v.scanRes = 200;
 
 % Scanning movement frequency
 v.scanSpeed = 600;

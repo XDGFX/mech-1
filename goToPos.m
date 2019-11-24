@@ -8,8 +8,10 @@ target.y = position(2);
 for d = ["x", "y"]
     if target.(d) > v.gantry.(d)
         target.(d) = v.gantry.(d);
+        fprintf("Target %s too large, defaulting to: %.f\n", d, v.gantry.(d))
     elseif target.(d) < 0
         target.(d) = 0;
+        fprintf("Target %s too small, defaulting to: 0\n", d)
     end
 end
 
@@ -50,6 +52,9 @@ else
     
     % Clear playtone pin
     playTone(a.a, p.ramp, 0, 0.1)
+    
+    % Relearn distance and start positions
+    [dist, start] = distPosDir;
     
     % Travel to l
     outputRamp(l, 0)
@@ -101,7 +106,7 @@ end
             
             % Reduce frequency squared to distance left
             if ~exist("ramp", "var") || ramp
-                frq = v.minFrq + peakFrq * (distLeft.(d) * 2 / dist.(d));
+                frq = v.minFrq + peakFrq * (distLeft.(d) * 2 / dist.(d))^1;
             end
         end
         
@@ -163,7 +168,7 @@ end
                 playTime = dist.(d) / (2 * v.minFrq);
                 
                 % Playtone to reach desired pos
-                playTone(a.a, p.ramp, v.minFrq, playTime)
+                playTone(a.a, p.ramp, v.minFrq / 2, playTime * 2)
                 
                 pause(playTime)
                 
