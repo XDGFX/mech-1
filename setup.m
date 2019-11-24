@@ -35,8 +35,15 @@ v.frq = 2000;
 % Ramp gradient
 v.m = 50;
 
-% Step Correction Factor; how many steps between frequency updates
-v.SCF = 1.0000e-04;
+% How many steps is close enough?
+v.CE = 50;
+
+% Minimum frequency to output when ramping
+v.minFrq = 400;
+
+% Maximum gantry dimensions
+v.gantry.x = 12500;
+v.gantry.y = 12500;
 
 %% --- SETUP ARDUINO ---
 

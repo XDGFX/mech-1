@@ -1,3 +1,5 @@
+[a, v] = zeroGantry(a, p, v);
+
 % Enable x and y
 writeDigitalPin(a.a, p.enable.x, 0)
 writeDigitalPin(a.a, p.enable.y, 0)
@@ -21,7 +23,7 @@ writeDigitalPin(a.a, p.direction.x, v.direction.x)
 writeDigitalPin(a.a, p.direction.y, v.direction.y)
 
 % Read position
-v.old = getPos(a, v, p);
+v.old = getPos(a, v, "b");
 
 % 2* frq * time = number of steps expected
 playTone(a.a, p.ramp, frq, time)
@@ -29,7 +31,7 @@ playTone(a.a, p.ramp, frq, time)
 pause(1)
 
 % Read new position
-v = getPos(a, v, p);
+v = getPos(a, v, "b");
 
 % Test x
 fprintf("Expected x steps: %s%.f\n", sign, 2 * frq * time)

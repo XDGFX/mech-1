@@ -1,9 +1,14 @@
-function [v] = getPos(a, v, p)
+function [v] = getPos(a, v, d)
 % Get new position of gantry from encoder readings
 % Note: Always set the direction pins first, then call this function!
 % Note: Always call this function when gantry is stopped!
 
-for d = ['x', 'y']
+% If d doesn't exist or is "b", check both axes, otherwise check "d" only
+if ~exist("d", "var") || d == "b"
+    d = ['x', 'y'];
+end
+
+for d = d
     
     if v.direction.(d) % Travelling in positive direction
         
