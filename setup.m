@@ -1,30 +1,30 @@
 function [a, p, v] = setup()
 %% --- PIN VARIABLES ---
 
-% Gantry enable pins
-p.cutout.x = "D49";
-p.cutout.y = "D48";
+% Gantry cutout pins
+p.cutout.x = "D6";
+p.cutout.y = "D7";
 
 % Gantry direction pins
-p.direction.x = "D53";
-p.direction.y = "D51";
+p.direction.x = "D5";
+p.direction.y = "D3";
 
 % Gantry microswitch pins
-p.mswitch.x = "D52";
-p.mswitch.y = "D50";
+p.mswitch.x = "D4";
+p.mswitch.y = "D2";
 
 % playTone / ramp pin
-p.ramp = "D9";
+p.ramp = "D15";
 
 % Gantry enable pins (previously toggle)
-p.enable.x = "D8";
-p.enable.y = "D7";
+p.enable.x = "D14";
+p.enable.y = "D16";
 
 % Encoder read pins
-p.encoder.x1 = "D2"; % Stepper input
-p.encoder.x2 = "D3"; % Edge trig pulse
-p.encoder.y1 = "D18"; % Stepper input
-p.encoder.y2 = "D19"; % Edge trig pulse
+p.encoder.x1 = "D18"; % Stepper input
+p.encoder.x2 = "D20"; % Edge trig pulse
+p.encoder.y1 = "D19"; % Stepper input
+p.encoder.y2 = "D21"; % Edge trig pulse
 
 % Hall effect sensor read pins
 p.sens(2) = "A10";
