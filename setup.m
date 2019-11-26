@@ -1,47 +1,65 @@
 function [a, p, v] = setup()
 %% --- PIN VARIABLES ---
 
-% Gantry enable pins
-p.enable.x = "D53";
-p.enable.y = "D52";
+% Gantry cutout pins
+p.cutout.x = "D6";
+p.cutout.y = "D7";
 
 % Gantry direction pins
-p.direction.x = "D51";
-p.direction.y = "D50";
+p.direction.x = "D5";
+p.direction.y = "D3";
 
 % Gantry microswitch pins
-p.mswitch.x = "D47";
-p.mswitch.y = "D46";
+p.mswitch.x = "D4";
+p.mswitch.y = "D2";
 
 % playTone / ramp pin
-p.ramp = "";
+p.ramp = "D15";
 
-% Ramp toggle pins (switch between ramp and 555)
-p.toggle.x = "";
-p.toggle.y = "";
+% Gantry enable pins (previously toggle)
+p.enable.x = "D14";
+p.enable.y = "D16";
 
 % Encoder read pins
-p.encoder.x1 = ""; % Stepper input
-p.encoder.x2 = ""; % Edge trig pulse
-p.encoder.y1 = ""; % Stepper input
-p.encoder.y2 = ""; % Edge trig pulse
+p.encoder.x1 = "D18"; % Stepper input
+p.encoder.x2 = "D20"; % Edge trig pulse
+p.encoder.y1 = "D19"; % Stepper input
+p.encoder.y2 = "D21"; % Edge trig pulse
+
+% Hall effect sensor read pins
+p.sens(2) = "A10";
+p.sens(3) = "A9";
+p.sens(1) = "A8";
 
 %% --- OTHER VARIABLES ---
 
 % RAMP VARIABLES
-% Ramp up / down step size in Hz
-v.stepSize = 25;
+% Max frequency
+v.frq = 4000;
 
-% Frequency at which ramp will switch to 555
-v.frq = 4400 - v.stepSize;
+% Ramp gradient
+v.m = 75;
 
-% Time pause between ramp steps
-v.tPause = 0.05;
+% How many steps is close enough?
+v.CE = 50;
 
-% Number of steps required to ramp up or down from full speed
-v.rampSteps = 464;
+% Minimum frequency to output when ramping
+v.minFrq = 400;
+
+% Maximum gantry dimensions
+v.gantry.x = 15000;
+v.gantry.y = 15000;
+
+% SCAN VARIABLES
+% Steps between scanning interval
+v.scanRes = 300;
+
+% Scanning movement frequency
+v.scanSpeed = 600;
 
 %% --- SETUP ARDUINO ---
+
+input("TURN OFF GANTRY! Press enter to continue... ")
 
 a.a = arduino('/dev/cu.usbmodem14101','Mega2560','Libraries',{'I2C', 'SPI', 'Servo', 'rotaryEncoder'});
 
@@ -50,6 +68,14 @@ a.a = arduino('/dev/cu.usbmodem14101','Mega2560','Libraries',{'I2C', 'SPI', 'Ser
 
 do = "DigitalOutput";
 di = "DigitalInput";
+ai = "AnalogInput";
+
+% Configure and set cutout pins low (enabled)
+configurePin(a.a, p.cutout.x, do)
+configurePin(a.a, p.cutout.y, do)
+
+writeDigitalPin(a.a, p.cutout.x, 0)
+writeDigitalPin(a.a, p.cutout.y, 0)
 
 % Configure and set enable pins low (enabled)
 configurePin(a.a, p.enable.x, do)
@@ -66,46 +92,13 @@ configurePin(a.a, p.direction.y, do)
 configurePin(a.a, p.mswitch.x, di)
 configurePin(a.a, p.mswitch.y, di)
 
-%% --- ZERO GANTRY ---
+% Configure hall effect sensor pins
+configurePin(a.a, p.sens(1), ai)
+configurePin(a.a, p.sens(2), ai)
+configurePin(a.a, p.sens(3), ai)
 
-% Set direction pins to -x, -y
-writeDigitalPin(a.a, p.direction.x, 0)
-writeDigitalPin(a.a, p.direction.y, 0)
+input("TURN ON GANTRY! Press enter to zero gantry... ")
 
-% Constant playtone of 490Hz for 100s
-playTone(a.a, p.ramp, 490, 100)
-
-% Initialise zeroing variables
-z.x = 1;
-z.y = 1;
-
-while z.x || z.y
-    
-    % Check x axis not reached home
-    if ~readDigitalPin(a.a, p.mswitch.x)
-        writeDigitalPin(a.a, p.enable.x, 1)
-        z.x = 0;
-    end
-    
-    % Check y axis not reached home
-    if ~readDigitalPin(a.a, p.mswitch.y)
-        writeDigitalPin(a.a, p.enable.y, 1)
-        z.y = 0;
-    end
-    
-end
-
-% Clear playtone pin
-playTone(a.a, p.ramp, 0, 0.1)
-
-% Configure rotary encoders (will start counting immediately)
-a.encoder.x = rotaryEncoder(a.a, p.encoder.x1, p.encoder.x2);
-a.encoder.y = rotaryEncoder(a.a, p.encoder.y1, p.encoder.y2);
-
-% Zero position (relative to gantry) and count (total steps since zero) variables
-v.pos.x = 0;
-v.pos.y = 0;
-v.count.x = 0;
-v.count.y = 0;
+[a, v] = zeroGantry(a, p, v);
 
 end

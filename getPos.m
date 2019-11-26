@@ -1,28 +1,32 @@
-function [v] = getPos(a, v, p)
+function [v] = getPos(a, v, d)
 % Get new position of gantry from encoder readings
 % Note: Always set the direction pins first, then call this function!
 % Note: Always call this function when gantry is stopped!
 
-for d = ['x', 'y']
+% If d doesn't exist or is "b", check both axes, otherwise check "d" only
+if ~exist("d", "var") || d == "b"
+    d = ['x', 'y'];
+end
+
+for d = d
     
-    % Find direction; 1 is positive, 0 is negative
-    direction.(d) = readDigitalPin(a.a, p.direction.(d));
+    rc = readCount(a.encoder.(d));
     
-    if direction.(d) % Travelling in positive direction
+    if v.direction.(d) % Travelling in positive direction
         
         % update position with change between old count and current count
-        v.pos.(d) = v.pos.(d) + (readCount(a.encoder.(d)) - v.count.(d));
+        v.pos.(d) = v.pos.(d) + (v.count.(d) - rc);
         
         % update current count
-        [v.count.(d), ~] = readCount(a.encoder.(d));
+        v.count.(d) = rc;
         
     else % Travelling in negative direction
         
         % update position with change between old count and current count
-        v.pos.(d) = v.pos.(d) - (readCount(a.encoder.(d)) - v.count.(d));
+        v.pos.(d) = v.pos.(d) + (rc - v.count.(d));
         
         % update current count
-        [v.count.(d), ~] = readCount(a.encoder.(d));
+        v.count.(d) = rc;
         
     end
 end
