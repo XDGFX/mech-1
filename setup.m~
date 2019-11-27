@@ -1,44 +1,44 @@
 function [a, p, v] = setup()
 %% --- PIN VARIABLES ---
 
-% Gantry enable pins
-p.cutout.x = "D49";
-p.cutout.y = "D48";
+% Gantry cutout pins
+p.cutout.x = "D6";
+p.cutout.y = "D7";
 
 % Gantry direction pins
-p.direction.x = "D53";
-p.direction.y = "D51";
+p.direction.x = "D5";
+p.direction.y = "D3";
 
 % Gantry microswitch pins
-p.mswitch.x = "D52";
-p.mswitch.y = "D50";
+p.mswitch.x = "D4";
+p.mswitch.y = "D2";
 
 % playTone / ramp pin
-p.ramp = "D9";
+p.ramp = "D15";
 
 % Gantry enable pins (previously toggle)
-p.enable.x = "D8";
-p.enable.y = "D7";
+p.enable.x = "D14";
+p.enable.y = "D16";
 
 % Encoder read pins
-p.encoder.x1 = "D2"; % Stepper input
-p.encoder.x2 = "D3"; % Edge trig pulse
-p.encoder.y1 = "D18"; % Stepper input
-p.encoder.y2 = "D19"; % Edge trig pulse
+p.encoder.x1 = "D18"; % Stepper input
+p.encoder.x2 = "D20"; % Edge trig pulse
+p.encoder.y1 = "D19"; % Stepper input
+p.encoder.y2 = "D21"; % Edge trig pulse
 
 % Hall effect sensor read pins
-p.sens(1) = "A15";
-p.sens(2) = "A14";
-p.sens(3) = "A13";
+p.sens(2) = "A10";
+p.sens(3) = "A9";
+p.sens(1) = "A8";
 
 %% --- OTHER VARIABLES ---
 
 % RAMP VARIABLES
 % Max frequency
-v.frq = 2000;
+v.frq = 4000;
 
 % Ramp gradient
-v.m = 50;
+v.m = 75;
 
 % How many steps is close enough?
 v.CE = 50;
@@ -47,21 +47,22 @@ v.CE = 50;
 v.minFrq = 400;
 
 % Maximum gantry dimensions
-v.gantry.x = 12500;
-v.gantry.y = 12500;
+% Ref: 15000 is 460mm
+v.gantry.x = 15000;
+v.gantry.y = 15000;
 
 % SCAN VARIABLES
 % Steps between scanning interval
 v.scanRes = 200;
 
 % Scanning movement frequency
-v.scanSpeed = 600;
+v.scanSpeed = 1000;
 
 %% --- SETUP ARDUINO ---
 
 input("TURN OFF GANTRY! Press enter to continue... ")
 
-a.a = arduino('/dev/cu.usbmodem14101','Mega2560','Libraries',{'I2C', 'SPI', 'Servo', 'rotaryEncoder'});
+a.a = arduino('/dev/cu.usbmodem14101','Mega2560','Libraries',{'I2C', 'SPI', 'Servo', 'rotaryEncoder', 'BathUniversity/StepperMotorAddOn'});
 
 
 %% --- INITIALISE PINS ---

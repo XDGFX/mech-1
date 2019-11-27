@@ -47,21 +47,22 @@ v.CE = 50;
 v.minFrq = 400;
 
 % Maximum gantry dimensions
+% Ref: 15000 is 460mm
 v.gantry.x = 15000;
 v.gantry.y = 15000;
 
 % SCAN VARIABLES
 % Steps between scanning interval
-v.scanRes = 300;
+v.scanRes = 200;
 
 % Scanning movement frequency
-v.scanSpeed = 600;
+v.scanSpeed = 1000;
 
 %% --- SETUP ARDUINO ---
 
 input("TURN OFF GANTRY! Press enter to continue... ")
 
-a.a = arduino('/dev/cu.usbmodem14101','Mega2560','Libraries',{'I2C', 'SPI', 'Servo', 'rotaryEncoder'});
+a.a = arduino('/dev/cu.usbmodem14101','Mega2560','Libraries',{'rotaryEncoder', 'BathUniversity/StepperMotorAddOn'});
 
 
 %% --- INITIALISE PINS ---
@@ -97,8 +98,15 @@ configurePin(a.a, p.sens(1), ai)
 configurePin(a.a, p.sens(2), ai)
 configurePin(a.a, p.sens(3), ai)
 
+% Configure stepper motor shield
+a.s = addon(a.a, 'BathUniversity/StepperMotorAddOn', {'D8', 'D9', 'D12', 'D13'});
+
+% Enable stepper motor shield
+writeDigitalPin(a.a, "D11", 1)
+writeDigitalPin(a.a, "D10", 1)
+
 input("TURN ON GANTRY! Press enter to zero gantry... ")
 
-[a, v] = zeroGantry(a, p, v);
+%[a, v] = zeroGantry(a, p, v);
 
 end

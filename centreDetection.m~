@@ -1,24 +1,27 @@
-function [v] = centreDetection(v)
+function [v] = centreDetection(v, numberMagnets)
+
+% Convert terminology
+sensedData = v.map;
 
 % Normalise sensor input
-v.map = v.map - 2.5;
-v.map = abs(v.map);
+sensedData = sensedData - 2.5;
+sensedData = abs(sensedData);
 
-% Apply S curve filter with foot, shoulder = 0, 0.3
-v.map = smf(v.map, [0, 0.3]);
+% Apply S curve filter
+sensedData = smf(sensedData, [0, 0.3]);
 
 % Use Wiener2 method to remove noise, with 2x2 radius
-v.map = wiener2(v.map, [2 2]);
+wiener2Data = wiener2(sensedData, [2 2]);
 
 % Remove all data with a value weaker than 0.4
-% v.map = v.map .* (v.map > 0.4); NOT NEEDED
+wiener2Data = wiener2Data .* (wiener2Data > 0);
 
 % Create contour plot from this data
-figure(1)
-contour(v.map, 20);
+% figure(1)
+% contour(wiener2Data, 20);
 
 % Output contour shapes into M
-[M, ~] = contour(v.map, 20);
+[M, ~] = contour(wiener2Data, 20);
 
 % Initial variables
 i = 1;
@@ -43,8 +46,12 @@ while loop
     
     % Loop through all vertices for this shape
     for i = i:i + nVert - 1
-        xPoints = [xPoints M(1, i)];
-        yPoints = [yPoints M(2, i)];
+        try
+            xPoints = [xPoints M(1, i)];
+            yPoints = [yPoints M(2, i)];
+        catch
+            a = 1;
+        end
     end
     
     % Average all vertices in x and y direction
@@ -65,7 +72,6 @@ while loop
     i = i + 1;
 end
 
-% Initialise weight variable
 pointsWeight = [];
 
 % Normalise intensity to have [min max] of [0 1]
@@ -84,29 +90,24 @@ for i = 1:length(intensity)
     end
 end
 
-% Evaluate how many magnets there are using k-means clustering
-[eva] = evalclusters(points','kmeans','DaviesBouldin','KList',1:12);
+[eva] = evalclusters(points','kmeans','DaviesBouldin','KList',[1:12]);
 
-% Assign number of magnets (clusters) detected
 nMagnetsDetected = eva.OptimalK;
 
-% Configure options
 opts = statset('Display','final');
-
-% Output centre points to variable 'points'
-[~, v.points] = kmeans(points', nMagnetsDetected, 'Distance', 'cityblock', ...
-    'Replicates', 5, 'Options', opts);
+[idx,C] = kmeans(points', nMagnetsDetected,'Distance','cityblock',...
+    'Replicates',5,'Options',opts);
 
 hold on
 
-plot(v.points(:,1),v.points(:,2),'kx',...
+plot(C(:,1),C(:,2),'kx',...
     'MarkerSize',15,'LineWidth',3)
-%
-% title("Actual nMagnets: " + numberMagnets + ". Detected nMagnets: " + nMagnetsDetected)
-%
+
+title("Actual nMagnets: " + numberMagnets + ". Detected nMagnets: " + nMagnetsDetected)
+
 hold off
 
 % Convert to gantry coordinates
-v.points = v.points .* v.scanRes;
+C = C .* v.scanRes;
 
 end

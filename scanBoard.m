@@ -8,7 +8,7 @@ end
 
 % Calculate scan grid dimensions
 grid.x = round(v.gantry.x / v.scanRes);
-grid.y = round(v.gantry.y / v.scanRes); %% CHANGE BASED ON PHYSICAL DIMS
+grid.y = round(v.gantry.y / 240); %% CHANGE BASED ON PHYSICAL DIMS
 
 % Calculate playTone times
 time.x = v.gantry.x / (2 * v.scanSpeed);
@@ -25,15 +25,22 @@ y = 1;
 skipY = 0;
 
 % Determine y repeats (1/3 of grid) and repeat [1, 0] that many times
-dx = repmat([1, 0], 1, round(grid.y / 6));
+% May finish at x = 0 or x = xmax
+%dx = repmat([1, 0], 1, round(grid.y / 6)); Old method
+dx = ones([1, round(grid.y / 3)]);
+dx(2:2:end) = 0;
 
 % Special condition for final run
 dx(end) = 2;
+dx(end+1) = dx(end - 2);
 
 for dx = dx
     
+    frq = v.minFrq;
+    
+    % Condition where end of scan reached
     if dx == 2
-        dx = 0;
+        continue
         skipY = 1;
     end
     
@@ -48,18 +55,19 @@ for dx = dx
     % Update position
     v = getPos(a, v);
     
+    % Determine start and end grid points
+    if v.direction.x
+        s = 1;      % Start
+        e = grid.x; % End
+        inc = 1;    % Increment
+    else
+        s = grid.x; % Start
+        e = 1;      % End
+        inc = -1;   % Increment
+    end
+    
     % Move to x = v.gantry.x
     playTone(a.a, p.ramp, v.scanSpeed, time.x)
-    
-    if v.direction.x
-        s = 1;
-        e = grid.x;
-        inc = 1;
-    else
-        s = grid.x;
-        e = 1;
-        inc = -1;
-    end
     
     % While loop for duration of playTone
     for x = s:inc:e
@@ -72,10 +80,20 @@ for dx = dx
         v.map(x, y + 2) = readVoltage(a.a, p.sens(3));
         
         if v.direction.x
+            
+            if x * v.scanRes < v.pos.x
+                fprintf("SKIPPING SENSOR READINGS +!\n")
+            end
+            
             while (x - 1) * v.scanRes > v.pos.x
                 v = getPos(a, v, "x");
             end
         else
+            
+            if (x - 2) * v.scanRes > v.pos.x
+                fprintf("SKIPPING SENSOR READINGS -!\n")
+            end
+            
             while (x - 1) * v.scanRes < v.pos.x
                 v = getPos(a, v, "x");
             end
