@@ -5,15 +5,15 @@ function [v] = goToPos(a, p, v, position, ramp)
 target.x = position(1);
 target.y = position(2);
 
-for d = ["x", "y"]
-    if target.(d) > v.gantry.(d)
-        target.(d) = v.gantry.(d);
-        fprintf("Target %s too large, defaulting to: %.f\n", d, v.gantry.(d))
-    elseif target.(d) < 0
-        target.(d) = 0;
-        fprintf("Target %s too small, defaulting to: 0\n", d)
-    end
-end
+% for d = ["x", "y"]
+%     if target.(d) > v.gantry.(d)
+%         target.(d) = v.gantry.(d);
+%         fprintf("Target %s too large, defaulting to: %.f\n", d, v.gantry.(d))
+%     elseif target.(d) < 0
+%         target.(d) = 0;
+%         fprintf("Target %s too small, defaulting to: 0\n", d)
+%     end
+% end
 
 [dist, start] = distPosDir;
 
