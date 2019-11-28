@@ -31,6 +31,12 @@ p.sens(2) = "A10";
 p.sens(3) = "A9";
 p.sens(1) = "A8";
 
+% Electromagnet pin
+p.magnet = "D24";
+
+% Cup switch pin
+p.cupswitch = "D28";
+
 %% --- OTHER VARIABLES ---
 
 % RAMP VARIABLES
@@ -48,15 +54,31 @@ v.minFrq = 400;
 
 % Maximum gantry dimensions
 % Ref: 15000 is 460mm
-v.gantry.x = 15000;
+v.gantry.x = 12000;
 v.gantry.y = 15000;
 
 % SCAN VARIABLES
 % Steps between scanning interval
-v.scanRes = 200;
+v.scanRes = 300;
 
 % Scanning movement frequency
 v.scanSpeed = 1000;
+
+% CUP VARIABLES
+% Cup currently held
+v.cup = 0;
+
+% Position vector of cups
+v.cuppos = [2000, 13000; ...
+    4000, 13000; ...
+    6000, 13000; ...
+    8000, 13000; ...
+    10000, 13000; ...
+    2000, 2000; ...
+    4000, 2000; ...
+    6000, 2000; ...
+    8000, 2000; ...
+    10000, 2000];
 
 %% --- SETUP ARDUINO ---
 
@@ -102,11 +124,20 @@ configurePin(a.a, p.sens(3), ai)
 a.s = addon(a.a, 'BathUniversity/StepperMotorAddOn', {'D8', 'D9', 'D12', 'D13'});
 
 % Enable stepper motor shield
-writeDigitalPin(a.a, "D11", 1)
+configurePin(a.a, "D10", "DigitalOutput")
+configurePin(a.a, "D11", "DigitalOutput")
 writeDigitalPin(a.a, "D10", 1)
+writeDigitalPin(a.a, "D11", 1)
+
+% Configure and set electromagnet low (disabled)
+configurePin(a.a, p.magnet, do)
+writeDigitalPin(a.a, p.magnet, 0)
+
+% % Configure microswitch input
+configurePin(a.a, p.cupswitch, di)
 
 input("TURN ON GANTRY! Press enter to zero gantry... ")
 
-%[a, v] = zeroGantry(a, p, v);
+[a, v] = zeroGantry(a, p, v);
 
 end

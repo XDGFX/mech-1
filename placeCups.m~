@@ -1,0 +1,9 @@
+function [v] = placeCups(a, v, p)
+
+for n = 1:size(v.cuppos, 2)
+    goToPos(v.cuppos(n, :))
+    
+    
+    
+end
+

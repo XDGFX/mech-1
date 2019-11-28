@@ -35,6 +35,7 @@ redo = input('did it work?');
 
 while redo
     MoveStepper(s, 1, 200, 199)
+    disp(order(x, :))
     redo = input('keep trying?');
 end
 

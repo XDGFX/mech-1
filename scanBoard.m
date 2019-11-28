@@ -8,7 +8,7 @@ end
 
 % Calculate scan grid dimensions
 grid.x = round(v.gantry.x / v.scanRes);
-grid.y = round(v.gantry.y / 240); %% CHANGE BASED ON PHYSICAL DIMS
+grid.y = round(12000 / v.scanRes); %% CHANGE BASED ON PHYSICAL DIMS
 
 % Calculate playTone times
 time.x = v.gantry.x / (2 * v.scanSpeed);
@@ -120,3 +120,6 @@ for dx = dx
     y = y + 3;
     
 end
+
+% Raise sensor head
+MoveStepper(a.s, 1, 50, 200)
