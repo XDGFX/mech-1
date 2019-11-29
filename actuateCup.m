@@ -2,7 +2,7 @@ function [v] = actuateCup(a, p, v, mode)
 
 % Variables
 speed = 50;
-steps = 270;
+steps = 240;
 
 if mode % Pickup cup
     
@@ -22,7 +22,7 @@ if mode % Pickup cup
     % Enable electromagnet
     writeDigitalPin(a.a, p.magnet, 1)
     
-    MoveStepper(a.s, 0, speed, 80)
+    MoveStepper(a.s, 0, speed, 40)
     
     pause(0.2)
     

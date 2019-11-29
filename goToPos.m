@@ -40,8 +40,14 @@ if abs(dist.(s) - dist.(l)) < v.CE
     writeDigitalPin(a.a, p.enable.(s), 0)
     writeDigitalPin(a.a, p.enable.(l), 0)
     
-    %travel to one
+    % Travel to s
     outputRamp(s, 1)
+    
+    % Clear playtone pin
+    playTone(a.a, p.ramp, 0, 0.1)
+    
+    % Update position
+    v = getPos(a, v);
     
     % Do corrections
     correctPos
@@ -167,7 +173,6 @@ end
         
         while dist.x > v.CE && dist.y > v.CE
             
-            
             % Disable both axes
             writeDigitalPin(a.a, p.enable.x, 1)
             writeDigitalPin(a.a, p.enable.y, 1)
@@ -194,7 +199,7 @@ end
                 
             end
             
-            [dist, ~] = distPosDir;
+            [dist, start] = distPosDir;
         end
     end
 

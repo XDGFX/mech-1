@@ -110,9 +110,9 @@ hold off
 v.points = v.points .* v.scanRes;
 
 % Add start position offset
-v.points(:, 1) = v.points(:, 1) + 1900;
+v.points(:, 1) = v.points(:, 1) + 1800;
 
 % Add calculated offset
-v.points(:, 2) = v.points(:, 2) - 0;
+v.points(:, 2) = v.points(:, 2) - 200;
 
 end

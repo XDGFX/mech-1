@@ -1,11 +1,11 @@
 clear variables
 
 [a, p, v] = setup();
-% 
-% %input("Ready to place cups. Press enter to begin.")
-% v = setupCups(a, p, v);
 
-% Reset gantry zero
+input("Ready to place cups. Press enter to begin.")
+%v = setupCups(a, p, v);
+
+% Reset gantry to zero
 [a, v] = zeroGantry(a, p, v);
 
 v = goToPos(a, p, v, [0, 2000]);
