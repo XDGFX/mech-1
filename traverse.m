@@ -7,6 +7,7 @@ function [v] = traverse(v)
 v.points(:, [1, 2]) = v.points(:, [2, 1]);
 
 % Plot magnet and cup positions
+clf
 hold on
 scatter(v.points(:,1), v.points(:,2), 'x', 'k', 'LineWidth', 1.5)
 scatter(v.cuppos(:,1), v.cuppos(:,2), 1000, 'LineWidth', 1.5)
@@ -15,7 +16,7 @@ scatter(v.cuppos(:,1), v.cuppos(:,2), 1000, 'LineWidth', 1.5)
 pos = [v.pos.x, v.pos.y];
 
 % Loop through all points
-for i = 1:length(v.points)
+for i = 1:size(v.points, 1)
     
     % --- CUPS ---
     % Initial best distance is infinite

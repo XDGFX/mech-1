@@ -109,7 +109,10 @@ hold off
 % Convert to gantry coordinates
 v.points = v.points .* v.scanRes;
 
+% Add start position offset
+v.points(:, 1) = v.points(:, 1) + 1900;
+
 % Add calculated offset
-v.points(:, 2) = v.points(:, 2) + 1100;
+v.points(:, 2) = v.points(:, 2) - 0;
 
 end

@@ -5,7 +5,7 @@ for n = 1:size(v.cuppos, 1)
     
     input("Place cup under position. Press enter to continue...")
     
-    v = actuateCup(a, p, v, 1);
-    v = actuateCup(a, p, v, 0);
+    %v = actuateCup(a, p, v, 1);
+    %v = actuateCup(a, p, v, 0);
     
 end

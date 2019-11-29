@@ -2,13 +2,14 @@ function [v] = scanBoard(a, p, v)
 
 v = getPos(a, v);
 
-if v.pos.x  ~= 0 || v.pos.y ~= 0
-    [a, v] = zeroGantry(a, p, v);
+% Initial scanning point
+if v.pos.x  ~= 0 || v.pos.y ~= 2000
+    v = goToPos(a, p, v, [0, 2000]);
 end
 
 % Calculate scan grid dimensions
 grid.x = round(v.gantry.x / v.scanRes);
-grid.y = round(12000 / v.scanRes); %% CHANGE BASED ON PHYSICAL DIMS
+grid.y = round((13000 - 2000)/ v.scanRes); %% CHANGE BASED ON PHYSICAL DIMS
 
 % Calculate playTone times
 time.x = v.gantry.x / (2 * v.scanSpeed);
@@ -40,8 +41,8 @@ for dx = dx
     
     % Condition where end of scan reached
     if dx == 2
-        continue
         skipY = 1;
+        continue
     end
     
     % Write x direction for scanning
@@ -122,4 +123,4 @@ for dx = dx
 end
 
 % Raise sensor head
-MoveStepper(a.s, 1, 50, 200)
+MoveStepper(a.s, 1, 50, 270)

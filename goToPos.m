@@ -15,6 +15,9 @@ target.y = position(2);
 %     end
 % end
 
+% Update position
+v = getPos(a, v);
+
 [dist, start] = distPosDir;
 
 % Assign shortest distance variable to 's' and longest to 'l'
@@ -24,6 +27,10 @@ if dist.x < dist.y
 else
     s = "y";
     l = "x";
+end
+
+if dist.(s) < 500 && dist.(l) < 500
+    ramp = 0;
 end
 
 % Check if both are close enough to the same
@@ -53,11 +60,20 @@ else
     % Clear playtone pin
     playTone(a.a, p.ramp, 0, 0.1)
     
+    % Update position
+    v = getPos(a, v);
+    
     % Relearn distance and start positions
     [dist, start] = distPosDir;
     
     % Travel to l
     outputRamp(l, 0)
+    
+    % Clear playtone pin
+    playTone(a.a, p.ramp, 0, 0.1)
+    
+    % Update position
+    v = getPos(a, v);
     
     % Do corrections
     correctPos

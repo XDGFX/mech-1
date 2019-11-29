@@ -1,8 +1,0 @@
-function [v] = markMagnets(a, p, v)
-
-for i = 2:sizev.traverse
-goToPos
-
-
-end
-

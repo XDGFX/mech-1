@@ -2,22 +2,27 @@ function [v] = actuateCup(a, p, v, mode)
 
 % Variables
 speed = 50;
-steps = 250;
+steps = 270;
 
 if mode % Pickup cup
     
     mswitch = 0;
+    failsafe = 0;
     
-    while ~mswitch
+    while ~mswitch && failsafe < 12
         % Move stepper down
         MoveStepper(a.s, 0, speed, 20)
         
         % Read microswitch
         mswitch = readDigitalPin(a.a, p.cupswitch);
+        
+        failsafe = failsafe + 1;
     end
     
     % Enable electromagnet
     writeDigitalPin(a.a, p.magnet, 1)
+    
+    MoveStepper(a.s, 0, speed, 80)
     
     pause(0.2)
     
