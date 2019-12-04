@@ -2,7 +2,7 @@ clear t output
 
 t = 0;
 
-while t < 50
+while t < 20
     
     for n = t(end):0.01:t(end) + 5
         output(size(t)) = 0;
@@ -18,15 +18,15 @@ while t < 50
 
 end
 
-while t < 100
+while t < 40
     
-    for n = t(end):0.001:t(end) + 2
+    for n = t(end):0.001:t(end) + 1.667
         output(size(t)) = 0;
         
         t = [t, n];
     end
 
-    for n = t(end):0.001:t(end) + 2
+    for n = t(end):0.001:t(end) + 1.667
         output(size(t)) = 1;
         
         t = [t, n];
@@ -34,15 +34,31 @@ while t < 100
 
 end
 
-while t < 150
+while t < 60
     
-    for n = t(end):0.001:t(end) + 0.5
+    for n = t(end):0.001:t(end) + 0.06
         output(size(t)) = 0;
         
         t = [t, n];
     end
 
-    for n = t(end):0.001:t(end) + 0.5
+    for n = t(end):0.001:t(end) + 0.066
+        output(size(t)) = 1;
+        
+        t = [t, n];
+    end
+
+end
+
+while t < 40
+    
+    for n = t(end):0.01:t(end) + 3.33
+        output(size(t)) = 0;
+        
+        t = [t, n];
+    end
+
+    for n = t(end):0.01:t(end) + 3.33
         output(size(t)) = 1;
         
         t = [t, n];
