@@ -1,16 +1,16 @@
 clear t output
 
-t = 1;
+t = 0;
 
 while t < 160
     
-    for n = t(end):0.01:t(end) + 1.02
+    for n = t(end):0.01:t(end) + 30
         output(size(t)) = 0;
         
         t = [t, n];
     end
 
-    for n = t(end):0.01:t(end) + 1.02
+    for n = t(end):0.01:t(end) + 30
         output(size(t)) = 1;
         
         t = [t, n];
