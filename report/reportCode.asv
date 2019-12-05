@@ -32,7 +32,7 @@ hold on
 
 clear t output
 
-t = -8;
+t = 0;
 
 while t < 160
     

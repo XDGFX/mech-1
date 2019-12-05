@@ -204,3 +204,14 @@ end
     end
 
 end
+
+
+find longest distance; assign to L
+find shortest distance; assign to S
+
+ramp up L
+once at full speed, switch L input to 555 circuit
+ramp up S
+    
+if either axis within ramp distance of destination
+    ramp axis down
