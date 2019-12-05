@@ -1,0 +1,33 @@
+figure('Position', [0 0 2000 450])
+
+x = 0:0.01:1;
+
+generateNoiseImages
+
+% Original Image
+subplot(2, 5, 6)
+imagesc([0 boardSizeX],[0 boardSizeY], sensedData');
+title("Original Image")
+
+subplot(2, 5, 7)
+sdata = smf(sensedData', [0, 1]);
+imagesc([0 boardSizeX],[0 boardSizeY], sdata);
+title("2 x 2")
+
+% Wiener2
+subplot(2, 5, 8)
+sdata = smf(sensedData', [0, 0.1]);
+imagesc([0 boardSizeX],[0 boardSizeY], sdata);
+title("3 x 3")
+
+% Wiener2
+subplot(2, 5, 9)
+sdata = smf(sensedData', [0.3, 0.7]);
+imagesc([0 boardSizeX],[0 boardSizeY], sdata);
+title("8 x 8")
+
+% Wiener2
+subplot(2, 5, 10)
+sdata = smf(sensedData', [0, 0.1]);
+imagesc([0 boardSizeX],[0 boardSizeY], sdata);
+title("10 x 10")
