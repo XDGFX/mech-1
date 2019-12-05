@@ -5,16 +5,6 @@ function [v] = goToPos(a, p, v, position, ramp)
 target.x = position(1);
 target.y = position(2);
 
-% for d = ["x", "y"]
-%     if target.(d) > v.gantry.(d)
-%         target.(d) = v.gantry.(d);
-%         fprintf("Target %s too large, defaulting to: %.f\n", d, v.gantry.(d))
-%     elseif target.(d) < 0
-%         target.(d) = 0;
-%         fprintf("Target %s too small, defaulting to: 0\n", d)
-%     end
-% end
-
 % Update position
 v = getPos(a, v);
 
@@ -29,6 +19,7 @@ else
     l = "x";
 end
 
+% If distance is short, don't bother ramping
 if dist.(s) < 500 && dist.(l) < 500
     ramp = 0;
 end
@@ -115,6 +106,7 @@ end
         % Save peak frequency
         peakFrq = frq - v.minFrq;
         
+        % While target not reached
         while abs(v.pos.(d) - start.(d)) < dist.(d)
             
             % Update position
@@ -126,9 +118,9 @@ end
             % Ramp playtone
             playTone(a.a, p.ramp, frq, 0.1)
             
-            % Reduce frequency squared to distance left
+            % Reduce frequency proportionally  to distance left
             if ~exist("ramp", "var") || ramp
-                frq = v.minFrq + peakFrq * (distLeft.(d) * 2 / dist.(d))^1;
+                frq = v.minFrq + peakFrq * (distLeft.(d) * 2 / dist.(d));
             end
         end
         
@@ -204,14 +196,3 @@ end
     end
 
 end
-
-
-find longest distance; assign to L
-find shortest distance; assign to S
-
-ramp up L
-once at full speed, switch L input to 555 circuit
-ramp up S
-    
-if either axis within ramp distance of destination
-    ramp axis down
